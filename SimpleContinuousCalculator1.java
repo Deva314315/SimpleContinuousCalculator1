@@ -3,117 +3,53 @@ package pack;
 import java.util.Scanner;
 
 public class SimpleContinuousCalculator1 {
+	public static void main(String[] args ) {
+		Scanner sc = new Scanner(System.in);
+		
+		CalculatorHelper helper = new CalculatorHelper(sc);
+		
+		double num1 = helper.readDouble("Enter First Integer");
+		double num2 = helper.readDouble("Enter Second Integer");
+		
+		double result = helper.performOperation(num1,num2);
+		System.out.println("Result : "+ result);
+		
+		while (true) {
+		    System.out.print("Enter next operation (add, subtract, multiply, divide, square, sqrt, store, recall, exit): ");
+		    String op = sc.nextLine().toLowerCase();
 
-    public static class Operations {
-        public static double add(double a, double b) {
-            return a + b;
-        }
+		    if (op.equals("exit")) {
+		        System.out.println("Final result: " + result);
+		        break;
+		    } else if (op.equals("store")) {
+		        System.out.print("Enter key to store this result: ");
+		        String key = sc.nextLine();
+		        helper.storeResult(key, result);
+		        continue;
+		    } else if (op.equals("recall")) {
+		        System.out.print("Enter key to recall value: ");
+		        String key = sc.nextLine();
+		        Double recalled = helper.getResult(key);
+		        if (recalled != null) {
+		            System.out.println("Recalled Value: " + recalled);
+		            result = recalled;
+		        } else {
+		            System.out.println("NOT FOUND");
+		        }
+		        continue;
+		    }
 
-        
-        public static double subtract(double a, double b) {
-            return a - b;
-          }
+		    if (op.equals("square") || op.equals("sqrt")) {
+		        result = helper.performNextOperation(op, result);   
+		        System.out.println("Result: " + result);
+		        continue;
+		    }
 
-        public static double multiply(double a, double b) {
-            return a * b;
-         }
+		     double nextNum = helper.readDouble("Enter another number: ");
+		    result = helper.performNextOperation(op, result, nextNum); 
+		    System.out.println("Result: " + result);
+		}
 
-        public static double divide(double a, double b) {
-            return a / b;
-           }
-    }
-
-    
-    public static double readDouble(Scanner sc, String message) {
-        while (true) {
-            try {
-                System.out.print(message);
-                return Double.parseDouble(sc.nextLine());
-            } catch (NumberFormatException e) {
-                System.out.println("Invalid input. Please enter a valid number.");
-             }
-        }
-       }
-
-    
-    public static double performOperation(Scanner sc, double num1, double num2) {
-        while (true) {
-            System.out.print("Enter operation (add, subtract, multiply, divide): ");
-            String op = sc.nextLine().toLowerCase();
-
-            switch (op) {
-                case "add":
-                    return Operations.add(num1, num2);
-                    
-                case "subtract":
-                	
-                    return Operations.subtract(num1, num2);
-                case "multiply":
-                    return Operations.multiply(num1, num2);
-                case "divide":
-                
-                	if (num2 != 0) {
-                		
-                        return Operations.divide(num1, num2);
-                    }
-                	else {
-                        System.out.println("Cannot divide by zero! Try again.");
-                    }
-                	
-                    break;
-                default:
-                    System.out.println("Invalid operation. Try again.");
-            }
-        }
-    }
-
-    public static double performNextOperation(String op, double result, double nextNum) {
-        switch (op) {
-            case "add":
-                return Operations.add(result, nextNum);
-            case "subtract":
-                return Operations.subtract(result, nextNum);
-            case "multiply":
-                return Operations.multiply(result, nextNum);
-            case "divide":
-                if (nextNum != 0) {
-                    return Operations.divide(result, nextNum);
-                }
-                else
-                {
-                    System.out.println("Cannot divide by zero! Skipping operation.");
-                    return result;
-                }
-            default:
-                System.out.println("Invalid operation. Try again.");
-                return result;
-        }
-    }
-
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-
-        double num1 = readDouble(sc, "Enter first number: ");
-        double num2 = readDouble(sc, "Enter second number: ");
-
-        double result = performOperation(sc, num1, num2);
-        System.out.println("Result: " + result);
-
-        while (true) {
-            System.out.print("Enter next operation (add, subtract, multiply, divide) or 'exit': ");
-            String op = sc.nextLine().toLowerCase();
-
-            if (op.equals("exit")) {
-                System.out.println("Final result: " + result);
-                break;
-            }
-
-            double nextNum = readDouble(sc, "Enter another number: ");
-            
-            result = performNextOperation(op, result, nextNum);
-            System.out.println("Result: " + result);
-        }
-
-        sc.close();
-    }
+		sc.close();
+	}
 }
