@@ -17,7 +17,10 @@ public class SimpleContinuousCalculator1 {
 		while (true) {
 		    System.out.print("Enter next operation (add, subtract, multiply, divide, square, sqrt, store, recall, exit): ");
 		    String op = sc.nextLine().toLowerCase();
-
+		    if (op.trim().isEmpty()) {
+		        System.out.println("No operation entered. Please try again.");
+		        continue;
+		    }
 		    if (op.equals("exit")) {
 		        System.out.println("Final result: " + result);
 		        break;
@@ -41,13 +44,13 @@ public class SimpleContinuousCalculator1 {
 
 		    if (op.equals("square") || op.equals("sqrt")) {
 		        result = helper.performNextOperation(op, result);   
-		        System.out.println("Result: " + result);
+		        System.out.printf("Result: %.2f%n", result);
 		        continue;
 		    }
 
 		     double nextNum = helper.readDouble("Enter another number: ");
 		    result = helper.performNextOperation(op, result, nextNum); 
-		    System.out.println("Result: " + result);
+		    System.out.printf("Result: %.2f%n", result);
 		}
 
 		sc.close();
